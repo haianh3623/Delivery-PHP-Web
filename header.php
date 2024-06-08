@@ -1,9 +1,10 @@
 <?php
+  ob_start();
   session_start();
   if(!isset($_SESSION['username'])){
     header("Location: login.php");
     exit();
-  }1
+  }
 ?>
 
 <!DOCTYPE html>
@@ -28,6 +29,7 @@
   <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
   <link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
   <link href="assets/css/style.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
   table {
     width: 100%;
@@ -72,6 +74,15 @@
   }
   .container {
     padding-top: 50px;
+  }
+  #chart-container {
+    width: 400px;
+    height: 400px;
+    margin: auto;
+  }
+  canvas {
+    width: 100% !important;
+    height: 100% !important;
   }
   </style>
 </head>

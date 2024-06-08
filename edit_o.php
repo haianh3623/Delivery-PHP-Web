@@ -24,13 +24,15 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
     $sql = "UPDATE orders SET status = '$status'  WHERE O_ID = $O_ID";
 
     if ($conn->query($sql) === TRUE) {
-        echo "Order updated successfully";
+        // echo "Order updated successfully";
+        
         header("Location: orders.php");
         exit;
     } else {
         echo "Error updating order: " . $conn->error;
     }
 } 
+
 ?>
 
 
@@ -107,6 +109,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
         </form>  
     </div>
   </main>
+
 
 
 <?php

@@ -8,7 +8,7 @@ if($_SESSION['auth'] != 2){
     exit();
 }
 
-$id = $_GET['id'];
+// $id = $_GET['id'];
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $Name = $_POST['Name'];
@@ -17,7 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $phone = $_POST['phone'];
     $gender = $_POST['gender'];
     $address = $_POST['address'];
-
+ 
     // Create a prepared statement
     $stmt = $conn->prepare("INSERT INTO employees (Name, birth, email, phone, gender, address) VALUES (?, ?, ?, ?, ?, ?)");
 

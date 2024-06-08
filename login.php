@@ -10,10 +10,11 @@
     $stmt = $conn->prepare("SELECT username, password, auth FROM users WHERE username = ? ");
 
     $stmt->bind_param("s", $username);
-
+ 
     $stmt->execute();
 
     $stmt->bind_result($uname, $pass, $auth);
+    
     while($stmt->fetch()){
         // echo "$uname , $pass, $auth";
         if($pass == $password && $uname == $username ){

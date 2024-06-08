@@ -61,7 +61,7 @@ include('sidebar.php');
     <div class="container row">
 
         <div class="col">
-        <h3>Top 3 nhân viên tạo nhiều đơn hàng nhất</h2>
+        <h3 style="padding-bottom: 50px;">Top 5 nhân viên tạo nhiều đơn hàng nhất</h2>
         <?php
         echo "<table>";
         echo "<tr><th>STT</th><th>Nhân viên</th><th>Số lượng đơn hàng</th></tr>";
@@ -71,7 +71,7 @@ include('sidebar.php');
         INNER JOIN employees ON orders.E_ID = employees.E_ID 
         GROUP BY orders.E_ID 
         ORDER BY order_count DESC 
-        LIMIT 3";
+        LIMIT 5";
         $result = $conn->query($query);
 
         if ($result->num_rows > 0) {
@@ -88,34 +88,72 @@ include('sidebar.php');
         ?>
         </div>
         <!-- <br> -->
-        <div class="col">
-        <h3>Top 3 người gửi nhiều đơn hàng nhất</h2>
-        <?php
-        echo "<table>";
-        echo "<tr><th>STT</th><th>Nhân viên</th><th>Số lượng đơn hàng</th></tr>";
-
-        $query = "SELECT sender.name, COUNT(*) as order_count 
-        FROM orders 
-        INNER JOIN sender ON orders.S_ID = sender.S_ID 
-        GROUP BY orders.S_ID 
-        ORDER BY order_count DESC 
-        LIMIT 3";
-        $result = $conn->query($query);
-
-        if ($result->num_rows > 0) {
-            $count = 1;
-            while($row = $result->fetch_assoc()) {
-                echo "<tr><td>" . $count . "</td><td>" . $row['name'] . "</td><td>" . $row['order_count'] . "</td></tr>";
-                $count++;
-            }
-        } else {
-            echo "<tr><td colspan='3'>No orders found.</td></tr>";
-        }
-
-        echo "</table>";
-        ?>
+        <div class="col-6">
+        <h3>Trạng thái đơn hàng</h2>
+        <div id="chart-container">
+            <canvas id="myChart"></canvas>
+        </div>
         </div>
     </div>
+
+    <?php
+        $stmt = $conn->prepare("SELECT COUNT(*) AS o FROM orders WHERE status = ?");
+        $labels = ['Đang xử lý', 'Đang giao hàng', 'Hoàn thành', 'Đã hủy'];
+        $count = ['Đang xử lý'=> 0, 'Đang giao hàng' => 0, 'Hoàn thành' => 0, 'Đã hủy' => 0];
+        foreach($labels as $label){
+            $stmt->bind_param("s", $label);
+            if($stmt->execute()){
+                $stmt->bind_result($data);
+                while ($stmt->fetch()) {
+                    $count[$label] = $data;
+                }
+            } else{
+                echo "Error:" . $stmt->error;
+            }
+        }
+
+    ?>
+
+    <script>
+        const labels = <?php echo json_encode(array_keys($count)); ?>;
+        const data = <?php echo json_encode(array_values($count)); ?>;
+
+        const ctx = document.getElementById('myChart').getContext('2d');
+        const myChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Count',
+                    data: data,
+                    backgroundColor: [
+                        'rgba(250, 250, 2, 0.8)',
+                        'rgba(2, 250, 60, 0.8)',
+                        'rgba(2, 155, 250, 0.8)',
+                        'rgba(250, 2, 2, 0.8)'
+                    ],
+                    borderColor: [
+                        'rgba(250, 250, 2, 1)',
+                        'rgba(2, 250, 60, 1)',
+                        'rgba(2, 155, 250, 1)',
+                        'rgba(250, 2, 2, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'right',
+                    },
+                    title: {
+                        position: 'top'
+                    }
+                }
+            }
+        });
+    </script>
 
 
   </main>

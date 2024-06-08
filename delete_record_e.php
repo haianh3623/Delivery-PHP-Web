@@ -14,9 +14,7 @@ if(isset($_POST['id'])) {
     $id = $_POST['id'];
 
     // Create a prepared statement
-    // $stmt = $conn->prepare("DELETE FROM employees WHERE E_ID = ?");
     $stmt = $conn->prepare("UPDATE employees SET state = 0 WHERE E_ID = ?");
-
 
     // Bind parameters
     $stmt->bind_param("i", $id);

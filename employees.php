@@ -58,7 +58,7 @@ $result = $conn->query($sql);
                 echo "<tr><td>" . $id. "</td><td>" . $row["Name"]. "</td><td>" . $row["birth"]. "</td><td>" . $row["email"]. "</td><td>" . $row["phone"]. "</td><td>" . $row["gender"]. "</td><td>" . $row["address"]. "</td>";
                 echo "<td><button style='margin-right: 10px; border-radius: 10px; background-color: white;' onclick=\"location.href='edit_e.php?id=" . $row["E_ID"]. "'\">Sửa</button>";
                 echo "<button style='background-color: red;border-radius: 10px;' onclick=\"deleteRecord(" . $row["E_ID"]. ")\">Xóa</button></td></tr>";
-              }
+              } 
         } else {
             echo "<tr><td colspan='3'>No results</td></tr>";
         }
